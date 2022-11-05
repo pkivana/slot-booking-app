@@ -1,24 +1,17 @@
-# README
+# SLOT BOOKING APP
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is APP is implemented so companies can book a time slot to load or unload goods at a warehouse
 
-Things you may want to cover:
+# SETUP
 
-* Ruby version
+You need to have all the development dependencies installed:
+- A ruby version `2.7.6` is used
+- A rails version `7.0.4` is used
+- The `bundler` ruby gem
 
-* System dependencies
+Extract git repo
 
-* Configuration
+Then:
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- Run `bundle install` to install all needed gems
+- Run `yarn install` to install all needed packages

@@ -1,12 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
-export default function Hello() {
-    return (
-        <p>Hello there</p>
-    )
-}
+import SlotCalendar from '../components/slot_calendar'
+import '../styles/main.scss'
 
 const container = document.getElementById('main');
 const root = ReactDOM.createRoot(container);
-root.render(<Hello name="React" />,);
+root.render(<SlotCalendar name="Slot calendar" />);

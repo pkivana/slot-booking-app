@@ -1,6 +1,6 @@
 # SLOT BOOKING APP
 
-This is APP is implemented so companies can book a time slot to load or unload goods at a warehouse
+This APP is implemented so companies can book a time slot to load or unload goods at a warehouse
 
 # SETUP
 

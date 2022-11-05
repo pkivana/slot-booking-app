@@ -1,0 +1,89 @@
+require:
+  - rubocop-rspec
+  - rubocop-rails
+  - rubocop-thread_safety
+
+AllCops:
+  TargetRubyVersion: 2.7.6
+  NewCops: enable
+
+Layout/CaseIndentation:
+  EnforcedStyle: end
+
+Layout/DotPosition:
+  EnforcedStyle: leading
+
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: variable
+  AutoCorrect: false
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+
+Layout/LineLength:
+  Max: 140
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
+Lint/RaiseException:
+  Enabled: true
+
+Metrics/BlockLength:
+  IgnoredMethods:
+    - namespace
+    - draw
+    - describe
+
+Style/Documentation:
+  Description: 'Document classes and non-namespace modules.'
+  Enabled: false
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/ExponentialNotation:
+  Enabled: true
+
+Style/SignalException:
+  EnforcedStyle: only_raise
+
+Style/NumberedParameters:
+  EnforcedStyle: disallow
+
+Style/HashTransformValues:
+  Enabled: false
+
+Rails:
+  Enabled: true
+
+Rails/DynamicFindBy:
+  Enabled: true
+
+Rails/ApplicationRecord:
+  Enabled: true
+
+Rails/FilePath:
+  EnforcedStyle: arguments
+
+RSpec/ExampleLength:
+  Max: 10
+
+# Tests that create multiple records would be slower if you
+# need to do the creation for every validation.
+RSpec/MultipleExpectations:
+  Enabled: false
+
+# Some of the specs are big and having 5 memoized helpers is too strict
+RSpec/MultipleMemoizedHelpers:
+  AllowSubject: true
+  Max: 10
+
+RSpec/VerifiedDoubles:
+  Enabled: false

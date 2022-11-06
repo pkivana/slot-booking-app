@@ -1,0 +1,98 @@
+# This workflow uses actions that are not certified by GitHub.  They are
+# provided by a third-party and are governed by separate terms of service,
+# privacy policy, and support documentation.
+#
+# This workflow will install a prebuilt Ruby version, install dependencies, and
+# run tests and linters.
+name: "Ruby on Rails CI"
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      RAILS_ENV: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 2
+      - name: Set up correct version of Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.6
+        # Use bundler version mentioned in Gemfile.lock
+        # https://discuss.circleci.com/t/using-bundler-2-0-during-ci-fails/27411/3
+      - name: Configure Bundler
+        run: |
+          gem uninstall bundler
+          BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")
+          gem install bundler -v $BUNDLER_VERSION
+          bundle install --jobs 4 --retry 3
+      - name: Which ruby?
+        run: ruby -v
+      - name: Which gem?
+        run: gem -v
+      - name: Which bundler?
+        run: bundle -v
+      - name: Configure DB for RSpec
+        run: |
+          cp config/database.yml.example config/database.yml
+          bundle exec rake db:setup
+      - name: Bundle install
+        run: bundle install
+      - name: Run RSpec
+        run: COVERAGE=true bundle exec rspec
+      - name: Upload coverage results
+        uses: actions/upload-artifact@main
+        if: always()
+        with:
+          name: slot-booking-app-coverage-report
+          path: coverage
+      - uses: actions/download-artifact@v3
+        id: download
+        with:
+          name: slot-booking-app-coverage-report
+          path: coverage
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: coverage
+      - name: 'Echo download path'
+        run: echo ${{steps.download.outputs.download-path}}
+      - name: Read file contents
+        id: read_file
+        uses: andstor/file-reader-action@v1
+        with:
+          path: "/home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json"
+      - id: getParams
+        run: |
+          content=`cat /home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json`
+          # the following lines are only required for multi line json
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          # end of optional handling for multi line json
+          echo "::set-output name=lastResult::$content"
+      - name: echo coverage
+        run: echo "COVERAGE=${{fromJson(steps.getParams.outputs.lastResult).result.line}}" >> $GITHUB_ENV
+      - name: Get Coverage for badge
+        run: |
+          REF=${{ github.ref }}
+          echo "github.ref: $REF"
+          IFS='/' read -ra PATHS <<< "$REF"
+          BRANCH_NAME="${PATHS[1]}_${PATHS[2]}"
+          echo $BRANCH_NAME
+          echo "BRANCH=$(echo ${BRANCH_NAME})" >> $GITHUB_ENV
+      - name: Create the Badge
+        uses: schneegans/dynamic-badges-action@v1.0.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: 6cfb4fc7d7e50f7158c03890c1a4a513
+          filename: slot-booking-app__${{ env.BRANCH }}.json
+          label: Test Coverage
+          message: ${{ env.COVERAGE }}
+          color: green
+          namedLogo: jest

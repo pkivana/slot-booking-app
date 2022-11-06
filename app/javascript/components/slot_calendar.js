@@ -65,6 +65,7 @@ export default function SlotCalendar() {
             .catch((err) => {
                 setOpen(false);
                 setError(err.message);
+                setShowSuccessMessage(false);
                 setShowErrorMessage(true);
                 console.log(error);
             });

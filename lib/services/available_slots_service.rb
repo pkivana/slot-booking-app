@@ -18,6 +18,7 @@ module Services
 
     def available_slots
       list = []
+
       slot_time = current_time.dup
       loop do
         list << { slot: slot_time.strftime('%H:%M') } unless booking_exist?(slot_time)
@@ -44,7 +45,7 @@ module Services
     end
 
     def current_time
-      @current_time ||= date.today? ? time_to_next_quarter_hour(date) : date.beginning_of_day
+      date.utc.today? ? time_to_next_quarter_hour(date) : date.beginning_of_day
     end
   end
 end

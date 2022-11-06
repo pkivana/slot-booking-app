@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { useState, useEffect } from "react";
 import Calendar from 'react-calendar';
-import BookingDuration from '../components/booking_duration'
+import BookingDuration from '../components/booking_duration';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import FlashMessage from 'react-flash-message'
+import FlashMessage from 'react-flash-message';
 import 'react-calendar/dist/Calendar.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -22,6 +22,16 @@ export default function SlotCalendar() {
     const [showSuccessMessage, setShowSuccessMessage] = useState(null);
     const [open, setOpen] = React.useState(false);
 
+    let socket = new WebSocket("wss://javascript.info/article/websocket/chat/ws");
+
+    socket.onmessage = function(event) {
+        let slot_value = event.data;
+        // this will not work for older browsers
+        let slot_button = document.querySelector(`button[value="${slot_value}"]`);
+
+        if(slot_button != null)
+            slot_button.remove();
+    }
 
     const setDuration = (event) => {
         setDurationValue(event.target.value)
@@ -48,6 +58,7 @@ export default function SlotCalendar() {
             .then(() => {
                 setOpen(false);
                 setShowSuccessMessage(true);
+                socket.send(slot);
             })
             .catch((err) => {
                 setOpen(false);
@@ -86,10 +97,10 @@ export default function SlotCalendar() {
         <>
             <div className="d-flex flex-column min-vh-100 justify-content-center align-items-center">
                 <h1>Slot Booking</h1>
-                <div>
+                <div className="m-2">
                     <Calendar minDate={new Date()} onChange={setDate} value={date} />
                 </div>
-                <div>
+                <div className="m-2">
                     <select value={duration} onChange={setDuration} className="form-select" aria-label="Duration select">
                         <BookingDuration />
                     </select>

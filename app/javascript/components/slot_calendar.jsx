@@ -29,8 +29,10 @@ export default function SlotCalendar() {
         // this will not work for older browsers
         let slot_button = document.querySelector(`button[value="${slot_value}"]`);
 
-        if(slot_button != null)
-            slot_button.remove();
+        if(slot_button != null) {
+            handleAvailableSlots();
+            slot_button = null;
+        }
     }
 
     const setDuration = (event) => {
@@ -68,16 +70,7 @@ export default function SlotCalendar() {
             });
     }
 
-    const handleClickOpen = (event) => {
-        setSlot(event.target.value);
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    useEffect(() => {
+    const handleAvailableSlots = () => {
         fetch(`api/v1/bookings/available_slots?date=${encodeURIComponent(date)}&duration=${encodeURIComponent(duration)}`, options())
             .then((response) => {
                 return response.json();
@@ -91,6 +84,19 @@ export default function SlotCalendar() {
                 setAvailableSlots(null);
                 console.log(error);
             });
+    }
+
+    const handleClickOpen = (event) => {
+        setSlot(event.target.value);
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    useEffect(() => {
+        handleAvailableSlots();
     }, [duration, date]);
 
     return (

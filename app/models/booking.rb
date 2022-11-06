@@ -20,7 +20,7 @@ class Booking < ApplicationRecord
     return unless self.end && start
 
     Booking.where('start >= ? AND end <= ?', (start - 1.day), (self.end + 1.day).end_of_day).find_each do |booking|
-      errors.add(:start, message: 'overlaps with existing booking') if booking_overlaps?(booking)
+      errors.add(:start, message: 'overlaps with an existing booking') if booking_overlaps?(booking)
     end
   end
 

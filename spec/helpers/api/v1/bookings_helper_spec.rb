@@ -2,16 +2,17 @@
 
 require 'rails_helper'
 
-# Specs in this file have access to a helper object that includes
-# the Api::V1::BookingsHelper. For example:
-#
-# describe Api::V1::BookingsHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
 RSpec.describe Api::V1::BookingsHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe '#booking_durations' do
+    it 'returns booking durations which can be selected' do
+      expect(helper.booking_durations.first).to eq({ duration: 15, duration_humanized: '15 minutes' })
+    end
+  end
+
+  describe '#time_to_next_quarter_hour' do
+    it 'returns datetime with next quarter and correct hour' do
+      expect(helper.time_to_next_quarter_hour(Time.utc(2022, 10, 25, 20, 10).to_datetime).strftime('%H:%M')).to eq('20:15')
+      expect(helper.time_to_next_quarter_hour(Time.utc(2022, 10, 25, 20, 58).to_datetime).strftime('%H:%M')).to eq('21:00')
+    end
+  end
 end

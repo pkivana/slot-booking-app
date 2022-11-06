@@ -13,11 +13,11 @@ module Api
       end
 
       def time_to_next_quarter_hour(time)
-        array = time.to_a
-        quarter = ((array[1] % 60) / 15.0).ceil
-        array[1] = (quarter * 15) % 60
-        offset = quarter == 4 ? 3600 : 0
-        (Time.zone.local(*array) + offset).change(offset: time.to_datetime.zone)
+        quarter = ((time.min % 60) / 15.0).ceil
+        min = (quarter * 15) % 60
+        offset = quarter == 4 ? 60 : 0
+
+        time.change(min: min) + offset.minutes
       end
 
       private

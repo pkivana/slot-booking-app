@@ -2,6 +2,8 @@
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
+require 'simplecov'
+
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 # Prevent database truncation if the environment is production
@@ -26,12 +28,23 @@ require 'rspec/rails'
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
+Time.zone = 'UTC'
+
 begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
+
+SimpleCov.start do
+  add_filter "/spec/"
+  minimum_coverage 90
+  maximum_coverage_drop 2
+end
+
 RSpec.configure do |config|
+  config.include ActiveSupport::Testing::TimeHelpers
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 

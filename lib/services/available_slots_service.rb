@@ -44,7 +44,7 @@ module Services
     end
 
     def current_time
-      @current_time ||= date.today? ? time_to_next_quarter_hour(date.to_time) : date.beginning_of_day.to_time
+      @current_time ||= date.today? ? time_to_next_quarter_hour(date) : date.beginning_of_day
     end
   end
 end

@@ -24,7 +24,7 @@ export default function BookingDuration() {
         <>
             {bookingDurations &&
                 bookingDurations.map(({ duration, duration_humanized }) => (
-                    <option value={duration}>{duration_humanized}</option>
+                    <option key={duration}  value={duration}>{duration_humanized}</option>
                 ))
             }
         </>

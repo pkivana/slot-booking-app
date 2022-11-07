@@ -18,9 +18,9 @@ export default function SlotCalendar() {
     const [duration, setDurationValue] = useState('15');
     const [availableSlots, setAvailableSlots] = useState(null);
     const [slot, setSlot] = useState(null);
-    const [showErrorMessage, setShowErrorMessage] = useState(null);
+    const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
-    const [showSuccessMessage, setShowSuccessMessage] = useState(null);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [open, setOpen] = React.useState(false);
 
     let socket = new WebSocket("wss://javascript.info/article/websocket/chat/ws");
@@ -64,7 +64,7 @@ export default function SlotCalendar() {
                     setErrorMessage(actualData.errors[0]);
                     setShowErrorMessage(true);
                 }
-                else{
+                else {
                     socket.send(slot);
                     setShowSuccessMessage(true);
                 }
@@ -74,6 +74,8 @@ export default function SlotCalendar() {
                 setError(err.message);
                 console.log(error);
             });
+        setShowSuccessMessage(false);
+        setShowErrorMessage(false);
     }
 
     const handleAvailableSlots = () => {
@@ -119,28 +121,28 @@ export default function SlotCalendar() {
                 </div>
                 <div className="booking-slots">
                     <div className="row row-cols-6 justify-content-center">
-                        {availableSlots &&
+                        { availableSlots &&
                             availableSlots.map(({ slot }) => (
                                 <button onClick={handleClickOpen}
                                         key={slot} value={slot} type="button" className="col btn btn-light">{slot}</button>
                             ))}
-                        { showSuccessMessage &&
+                        { showSuccessMessage ?
                             <div>
                                 <FlashMessage duration={5000}>
                                     <div className="alert alert-success alert-message" role="alert">
                                         Time slot successfully booked.
                                     </div>
                                 </FlashMessage>
-                            </div>
+                            </div> : ''
                         }
-                        { showErrorMessage &&
+                        { showErrorMessage ?
                             <div>
                                 <FlashMessage duration={5000}>
                                     <div className="alert alert-danger alert-message" role="alert">
                                         Time slot could not be booked. Error: {errorMessage}
                                     </div>
                                 </FlashMessage>
-                            </div>
+                            </div> : ''
                         }
                     </div>
                 </div>

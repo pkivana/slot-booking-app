@@ -19,6 +19,7 @@ export default function SlotCalendar() {
     const [availableSlots, setAvailableSlots] = useState(null);
     const [slot, setSlot] = useState(null);
     const [showErrorMessage, setShowErrorMessage] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null);
     const [showSuccessMessage, setShowSuccessMessage] = useState(null);
     const [open, setOpen] = React.useState(false);
 
@@ -57,16 +58,20 @@ export default function SlotCalendar() {
             .then((response) => {
                 return response.json();
             })
-            .then(() => {
+            .then((actualData) => {
                 setOpen(false);
-                setShowSuccessMessage(true);
-                socket.send(slot);
+                if(actualData.errors) {
+                    setErrorMessage(actualData.errors[0]);
+                    setShowErrorMessage(true);
+                }
+                else{
+                    socket.send(slot);
+                    setShowSuccessMessage(true);
+                }
             })
             .catch((err) => {
                 setOpen(false);
                 setError(err.message);
-                setShowSuccessMessage(false);
-                setShowErrorMessage(true);
                 console.log(error);
             });
     }
@@ -119,20 +124,20 @@ export default function SlotCalendar() {
                                 <button onClick={handleClickOpen}
                                         key={slot} value={slot} type="button" className="col btn btn-light">{slot}</button>
                             ))}
-                        { showErrorMessage &&
-                            <div>
-                                <FlashMessage duration={5000}>
-                                    <div className="alert alert-danger alert-message" role="alert">
-                                        Time slot not booked. Error: {error}
-                                    </div>
-                                </FlashMessage>
-                            </div>
-                        }
                         { showSuccessMessage &&
                             <div>
                                 <FlashMessage duration={5000}>
                                     <div className="alert alert-success alert-message" role="alert">
                                         Time slot successfully booked.
+                                    </div>
+                                </FlashMessage>
+                            </div>
+                        }
+                        { showErrorMessage &&
+                            <div>
+                                <FlashMessage duration={5000}>
+                                    <div className="alert alert-danger alert-message" role="alert">
+                                        Time slot could not be booked. Error: {errorMessage}
                                     </div>
                                 </FlashMessage>
                             </div>

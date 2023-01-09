@@ -1,5 +1,6 @@
 # SLOT BOOKING APP
 
+[![Ruby on Rails CI](https://github.com/pkivana/slot-booking-app/actions/workflows/tests.yml/badge.svg)](https://github.com/pkivana/slot-booking-app/actions/workflows/tests.yml)
 ![Coverage Badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/pkivana/6cfb4fc7d7e50f7158c03890c1a4a513/raw/slot-booking-app__heads_main.json)
 
 This APP is implemented so companies can book a time slot to load or unload goods at a warehouse

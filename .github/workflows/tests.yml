@@ -48,30 +48,10 @@ jobs:
           bundle exec rails webpacker:compile
       - name: Run RSpec
         run: COVERAGE=true bundle exec rspec
-      - name: Upload coverage results
-        uses: actions/upload-artifact@main
-        if: always()
-        with:
-          name: slot-booking-app-coverage-report
-          path: coverage
-      - uses: actions/download-artifact@v3
-        id: download
-        with:
-          name: slot-booking-app-coverage-report
-          path: coverage
-      - name: Display structure of downloaded files
-        run: ls -R
-        working-directory: coverage
-      - name: 'Echo download path'
-        run: echo ${{steps.download.outputs.download-path}}
-      - name: Read file contents
-        id: read_file
-        uses: andstor/file-reader-action@v1
-        with:
-          path: "/home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json"
+
       - id: getParams
         run: |
-          content=`cat /home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json`
+          content=`cat /coverage/.last_run.json`
           # the following lines are only required for multi line json
           content="${content//'%'/'%25'}"
           content="${content//$'\n'/'%0A'}"

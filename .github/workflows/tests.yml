@@ -51,7 +51,7 @@ jobs:
 
       - id: getParams
         run: |
-          content=`cat /coverage/.last_run.json`
+          content=`cat /home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json`
           # the following lines are only required for multi line json
           content="${content//'%'/'%25'}"
           content="${content//$'\n'/'%0A'}"

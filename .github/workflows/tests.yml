@@ -76,5 +76,6 @@ jobs:
           filename: slot-booking-app__${{ env.BRANCH }}.json
           label: Test Coverage
           message: "${{ env.COVERAGE }}%"
-          color: green
-          namedLogo: jest
+          valColorRange: ${{ env.COVERAGE }}
+          maxColorRange: 100
+          minColorRange: 0

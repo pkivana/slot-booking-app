@@ -62,7 +62,7 @@ jobs:
         env:
           NUM: ${{ env.coverage }}
         run: |
-          echo "NUM_TEST=$(($NUM + 200))" >> $GITHUB_ENV
+          echo "NUM_TEST=$((env.COVERAGE + 200))" >> $GITHUB_ENV
       - run: echo '${{ env.NUM_TEST }}'
       - name: Get Coverage for badge
         run: |

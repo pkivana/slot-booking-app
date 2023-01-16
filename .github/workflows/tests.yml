@@ -60,10 +60,11 @@ jobs:
       - run: echo "COVERAGE=${{ fromJson(steps.coverage.outputs.last_result_content).result.line }}"  >> $GITHUB_ENV
       - name: Test num
         env:
-          NUM: ${{ env.coverage }}
+          NUM: ${{ env.COVERAGE }}
         run: |
-          echo "NUM_TEST=$((env.COVERAGE + 200))" >> $GITHUB_ENV
-      - run: echo '${{ env.NUM_TEST }}'
+          echo "GITHUB_RUN_NUMBER_WITH_OFFSET=$(($NUM + 200))" >> $GITHUB_ENV
+
+      - run: echo '${{ env.GITHUB_RUN_NUMBER_WITH_OFFSET }}'
       - name: Get Coverage for badge
         run: |
           REF=${{ github.ref }}

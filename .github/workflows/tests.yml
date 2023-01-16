@@ -61,7 +61,7 @@ jobs:
       - name: getParams
         id: nums
         run: |
-          echo "num_val=${300}" >> $GITHUB_OUTPUT
+          echo "num_val=${env.COVERAGE}" >> $GITHUB_OUTPUT
       - name: Test num
         env:
           NUM: ${{ steps.nums.outputs.num_val }}

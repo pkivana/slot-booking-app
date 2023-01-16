@@ -70,8 +70,15 @@ jobs:
           
       - run: |
           gb=23.56766
-          result=$(ruby -e "p $gb/7")
+          result=$(ruby -e "p (($gb+22+34+78.22)/7).round")
           echo "TEST_THIS5=${result}" >> $GITHUB_ENV
+      - run: |
+          gb=23.56766
+          result=$(ruby -e "p $gb+22+34+78.22")
+          result=$(ruby -e "p $result/7")
+          result=$(ruby -e "p $result.round")
+
+          echo "TEST_THIS6=${result}" >> $GITHUB_ENV
       - run: |
           gb=23.56766
           echo 'TEST_THIS=$( echo "scale=4;$gb+5/2" | bc )' >> $GITHUB_ENV

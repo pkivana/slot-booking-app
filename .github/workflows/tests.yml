@@ -58,9 +58,13 @@ jobs:
           content=$(jq -c . < /home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json)
           echo "last_result_content=${content}" >> $GITHUB_OUTPUT
       - run: echo "COVERAGE=${{ fromJson(steps.coverage.outputs.last_result_content).result.line }}"  >> $GITHUB_ENV
+      - name: getParams
+        id: nums
+        run: |
+          echo "num_val=${300}" >> $GITHUB_OUTPUT
       - name: Test num
         env:
-          NUM: ${{ env.COVERAGE }}
+          NUM: ${{ steps.nums.outputs.num_val }}
         run: |
           echo "GITHUB_RUN_NUMBER_WITH_OFFSET=$(($NUM + 200))" >> $GITHUB_ENV
 

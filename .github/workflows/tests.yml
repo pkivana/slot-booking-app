@@ -58,7 +58,10 @@ jobs:
           content=$(jq -c . < /home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json)
           echo "last_result_content=${content}" >> $GITHUB_OUTPUT
       - run: echo "COVERAGE=${{ fromJson(steps.coverage.outputs.last_result_content).result.line }}"  >> $GITHUB_ENV
-      - run: echo "NUM_TEST=$((env.COVERAGE+200))"  >> $GITHUB_ENV
+      - name: Test num
+        run: |
+          num_value = $(env.COVERAGE+200)
+          echo "NUM_TEST=${num_value}"  >> $GITHUB_ENV
       - run: echo '${{ env.NUM_TEST }}'
       - name: Get Coverage for badge
         run: |

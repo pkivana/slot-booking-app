@@ -53,11 +53,12 @@ jobs:
       - run: echo '${{ fromJson(env.PACKAGE_JSON).result.line }}'
 
       - name: getParams
+        id: coverage
         run: |
           content=$(jq -c . < /home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json)
-          echo '${{ content }}'
-          echo '${{ fromJson(content).result.line }}'
-          echo "COVERAGE=$(echo '${{ fromJson(content).result.line }}')" >> $GITHUB_ENV
+          echo "last_result_content=$(content)" >> $GITHUB_OUTPUT
+      - run: echo '${{ fromJson(steps.coverage.outputs.last_result_content).result.line }}'
+      
       - name: Get Coverage for badge
         run: |
           REF=${{ github.ref }}

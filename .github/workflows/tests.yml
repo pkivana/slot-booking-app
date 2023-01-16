@@ -49,22 +49,15 @@ jobs:
       - name: Run RSpec
         run: COVERAGE=true bundle exec rspec
       - run: echo "PACKAGE_JSON=$(jq -c . < /home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json)" >> $GITHUB_ENV
-      - run: echo "PACKAGE_JSON2=$(jq -c . < ./home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json)" >> $GITHUB_ENV
 
       - run: echo '${{ fromJson(env.PACKAGE_JSON).result.line }}'
-      - run: echo '${{ fromJson(env.PACKAGE_JSON2).result.line  }}'
 
       - name: getParams
         run: |
-          content=`cat /home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json`
-          # the following lines are only required for multi line json
-          content="${content//'%'/'%25'}"
-          content="${content//$'\n'/'%0A'}"
-          content="${content//$'\r'/'%0D'}"
-          # end of optional handling for multi line json
-          echo "COVERAGE_CONTENT=$(echo ${content})" >> $GITHUB_ENV
-      - name: echo coverage
-        run: echo "COVERAGE=${{fromJson(env.COVERAGE_CONTENT).result.line}}" >> $GITHUB_ENV
+          content=$(jq -c . < /home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json)
+          echo '${{ content }}'
+          echo '${{ fromJson(content).result.line }}'
+          echo "COVERAGE=$(echo '${{ fromJson(content).result.line }}')" >> $GITHUB_ENV
       - name: Get Coverage for badge
         run: |
           REF=${{ github.ref }}

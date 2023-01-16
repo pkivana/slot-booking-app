@@ -66,6 +66,17 @@ jobs:
         id: nums
         run: |
           echo "num_val=${{env.COVERAGE}}" >> $GITHUB_OUTPUT
+          
+      - run: |
+          echo "TEST_THIS=$( echo 'scale=4;20+5/2' | bc )" >> $GITHUB_ENV
+                
+      - run: |
+          gb=23.56766
+          echo "TEST_THIS2=$( echo 'scale=4;gb+5/2' | bc )" >> $GITHUB_ENV
+      
+      - run: echo '${{ env.TEST_THIS }}'
+      - run: echo '${{ env.TEST_THIS2 }}'
+
       - name: Test num
         env:
           NUM: ${{ steps.nums.outputs.num_val }}

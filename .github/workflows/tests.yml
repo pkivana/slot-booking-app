@@ -59,8 +59,10 @@ jobs:
           echo "last_result_content=${content}" >> $GITHUB_OUTPUT
       - run: echo "COVERAGE=${{ fromJson(steps.coverage.outputs.last_result_content).result.line }}"  >> $GITHUB_ENV
       - name: Test num
+        env:
+          NUM: ${{ env.coverage }}
         run: |
-          num_value = $(env.COVERAGE+200)
+          num_value = $(NUM+200)
           echo "NUM_TEST=${num_value}"  >> $GITHUB_ENV
       - run: echo '${{ env.NUM_TEST }}'
       - name: Get Coverage for badge

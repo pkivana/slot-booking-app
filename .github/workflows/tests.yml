@@ -48,7 +48,14 @@ jobs:
           bundle exec rails webpacker:compile
       - name: Run RSpec
         run: COVERAGE=true bundle exec rspec
-
+      - name: JSON to variables
+        uses: rgarcia-phi/json-to-variables@v1.1.0
+        with:
+          filename: '/home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json'
+          prefix: coverage
+          masked: true
+      - name: Show output
+        run: echo "The time was ${{ env.coverage_result_line }}"
       - id: getParams
         run: |
           content=`cat /home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json`
@@ -57,7 +64,7 @@ jobs:
           content="${content//$'\n'/'%0A'}"
           content="${content//$'\r'/'%0D'}"
           # end of optional handling for multi line json
-          result= $(fromJson(content).result.line)
+          result= $(fromJson($content).result.line)
           echo "COVERAGE=$(echo $result)" >> $GITHUB_ENV
       - name: Get Coverage for badge
         run: |

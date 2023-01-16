@@ -62,11 +62,6 @@ jobs:
         id: nums2
         run: |
           echo "num_val=$(echo ${env.COVERAGE})" >> $GITHUB_OUTPUT
-      - run: |
-          val=${steps.nums.outputs.num_val%.*}
-          echo '${{ val }}'
-      - run: echo '${{ steps.nums.outputs.num_val%.* }}'
-
       - run: echo '${{ steps.nums.outputs.num_val%.* }}'
 
       - name: getParams

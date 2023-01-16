@@ -67,19 +67,25 @@ jobs:
         run: |
           echo "num_val=${{env.COVERAGE}}" >> $GITHUB_OUTPUT
           
+          
       - run: |
-          echo "TEST_THIS=$( echo 'scale=4;20+5/2' | bc )" >> $GITHUB_ENV
+          gb=23.56766
+          result=$(ruby -e "p $gb/7")
+          echo "TEST_THIS5=${result}" >> $GITHUB_ENV
+      - run: |
+          gb=23.56766
+          echo 'TEST_THIS=$( echo "scale=4;$gb+5/2" | bc )' >> $GITHUB_ENV
       - run: ruby -e 'p 22.33.round'
       - run: |
-          echo "TEST_THIS3=$( ruby -e 'p 22.33.round' )" >> $GITHUB_ENV
+          gb=23.56766
+          echo "TEST_THIS3=$( echo "$gb / 7" | bc )" >> $GITHUB_ENV
             
       - run: |
           gb=23.56766
-          echo "TEST_THIS4=$( ruby -e 'p (`gb`/7).round' )" >> $GITHUB_ENV
+          echo "TEST_THIS4=$( ruby -e "p ($gb/7).round" )" >> $GITHUB_ENV
       - run: |
           gb=23.56766
-          echo "TEST_THIS2=$( echo 'scale=4;$gb+5/2' | bc )" >> $GITHUB_ENV
-      
+          echo "TEST_THIS2=$( echo "scale=4;$gb+5/2" | bc )" >> $GITHUB_ENV
       - run: echo '${{ env.TEST_THIS }}'
       - run: echo '${{ env.TEST_THIS2 }}'
       - run: echo '${{ env.TEST_THIS3 }}'

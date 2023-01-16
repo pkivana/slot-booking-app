@@ -57,9 +57,7 @@ jobs:
           content="${content//$'\n'/'%0A'}"
           content="${content//$'\r'/'%0D'}"
           # end of optional handling for multi line json
-          echo "::set-output name=lastResult::$content"
-      - name: echo coverage
-        run: echo "COVERAGE=${{fromJson(steps.getParams.outputs.lastResult).result.line}}" >> $GITHUB_ENV
+          echo "COVERAGE=$(echo fromJson($content).result.line)" >> $GITHUB_ENV
       - name: Get Coverage for badge
         run: |
           REF=${{ github.ref }}

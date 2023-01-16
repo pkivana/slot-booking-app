@@ -56,7 +56,7 @@ jobs:
         id: coverage
         run: |
           content=$(jq -c . < /home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json)
-          echo "last_result_content=$(content)" >> $GITHUB_OUTPUT
+          echo "last_result_content=${content}" >> $GITHUB_OUTPUT
       - run: echo '${{ fromJson(steps.coverage.outputs.last_result_content).result.line }}'
       
       - name: Get Coverage for badge

@@ -48,6 +48,12 @@ jobs:
           bundle exec rails webpacker:compile
       - name: Run RSpec
         run: COVERAGE=true bundle exec rspec
+      - run: echo "PACKAGE_JSON=$(jq -c . < /home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json)" >> $GITHUB_ENV
+      - run: echo "PACKAGE_JSON2=$(jq -c . < ./home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json)" >> $GITHUB_ENV
+
+      - run: echo '${{ fromJson(env.PACKAGE_JSON).result.line }}'
+      - run: echo '${{ fromJson(env.PACKAGE_JSON2).result.line  }}'
+
       - name: getParams
         run: |
           content=`cat /home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json`

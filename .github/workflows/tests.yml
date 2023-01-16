@@ -62,8 +62,6 @@ jobs:
         id: nums2
         run: |
           echo "num_val=$(echo ${env.COVERAGE})" >> $GITHUB_OUTPUT
-      - run: echo '${{ steps.nums.outputs.num_val%.* }}'
-
       - name: getParams
         id: nums
         run: |
@@ -72,6 +70,8 @@ jobs:
         env:
           NUM: ${{ steps.nums.outputs.num_val }}
         run: |
+          echo "GITHUB_RUN_NUMBER_WITH_OFFSET2=$(( (77.20 + (77.20 - 1)) / 2 ))" >> $GITHUB_ENV
+
           echo "GITHUB_RUN_NUMBER_WITH_OFFSET=$((77.20 + $NUM + $NUM + $NUM + 200 + 2.93))" >> $GITHUB_ENV
           echo "GITHUB_RUN_NUMBER_WITH_OFFSET2=$(($NUM / 10))" >> $GITHUB_ENV
 

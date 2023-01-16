@@ -59,9 +59,15 @@ jobs:
           echo "last_result_content=${content}" >> $GITHUB_OUTPUT
       - run: echo "COVERAGE=${{ fromJson(steps.coverage.outputs.last_result_content).result.line }}"  >> $GITHUB_ENV
       - name: getParams
+        id: nums2
+        run: |
+          echo "num_val=$(echo ${env.COVERAGE})" >> $GITHUB_OUTPUT
+      - run: echo '${{ steps.nums2.outputs.num_val }}'
+
+      - name: getParams
         id: nums
         run: |
-          echo "num_val=${env.COVERAGE}" >> $GITHUB_OUTPUT
+          echo "num_val=${{env.COVERAGE}}" >> $GITHUB_OUTPUT
       - name: Test num
         env:
           NUM: ${{ steps.nums.outputs.num_val }}

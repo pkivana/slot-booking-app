@@ -139,6 +139,7 @@ jobs:
           gistID: 6cfb4fc7d7e50f7158c03890c1a4a513
           filename: slot-booking-app__${{ env.BRANCH }}.json
           label: Test Coverage
+          namedLogo: JavaScript
           message: "${{ env.COVERAGE }}%"
           valColorRange: ${{ env.COVERAGE }}
           maxColorRange: 100

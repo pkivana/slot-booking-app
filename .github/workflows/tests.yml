@@ -48,82 +48,12 @@ jobs:
           bundle exec rails webpacker:compile
       - name: Run RSpec
         run: COVERAGE=true bundle exec rspec
-      - run: echo "PACKAGE_JSON=$(jq -c . < /home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json)" >> $GITHUB_ENV
-
-      - run: echo '${{ fromJson(env.PACKAGE_JSON).result.line }}'
-
       - name: getParams
         id: coverage
         run: |
           content=$(jq -c . < /home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json)
           echo "last_result_content=${content}" >> $GITHUB_OUTPUT
       - run: echo "COVERAGE=${{ fromJson(steps.coverage.outputs.last_result_content).result.line }}"  >> $GITHUB_ENV
-      - name: getParams
-        id: nums2
-        run: |
-          echo "num_val=$(echo ${env.COVERAGE})" >> $GITHUB_OUTPUT
-      - name: getParams
-        id: nums
-        run: |
-          echo "num_val=${{env.COVERAGE}}" >> $GITHUB_OUTPUT
-          
-          
-      - run: |
-          gb=23.56766
-          result=$(ruby -e "p (($gb+22+34+78.22)/7).round")
-          echo "TEST_THIS5=${result}" >> $GITHUB_ENV
-      - run: |
-          gb=23.56766
-          result=$(ruby -e "p $gb+22+34+78.22")
-          result=$(ruby -e "p $result/7")
-          result=$(ruby -e "p $result.round")
-
-          echo "TEST_THIS6=${result}" >> $GITHUB_ENV
-      - run: |
-          gb=23.56766
-          echo 'TEST_THIS=$( echo "scale=4;$gb+5/2" | bc )' >> $GITHUB_ENV
-      - run: ruby -e 'p 22.33.round'
-      - run: |
-          gb=23.56766
-          echo "TEST_THIS3=$( echo "$gb / 7" | bc )" >> $GITHUB_ENV
-            
-      - run: |
-          gb=23.56766
-          echo "TEST_THIS4=$( ruby -e "p ($gb/7).round" )" >> $GITHUB_ENV
-      - run: |
-          gb=23.56766
-          echo "TEST_THIS2=$( echo "scale=4;$gb+5/2" | bc )" >> $GITHUB_ENV
-      - run: echo '${{ env.TEST_THIS }}'
-      - run: echo '${{ env.TEST_THIS2 }}'
-      - run: echo '${{ env.TEST_THIS3 }}'
-      - run: echo '${{ env.TEST_THIS4 }}'
-
-      - name: Test num
-        env:
-          NUM: ${{ steps.nums.outputs.num_val }}
-        run: |
-          echo "($NUM+0.5)/1"
-          
-      - run: |
-          gb=23.56766
-          echo "($gb+0.5)/1"
-      - run: |
-          gb=23.56766
-          echo "test1=$( echo "($gb+0.5)/1" )" >> $GITHUB_ENV
-      - run: |
-          gb=23.56766
-          echo "test2=$( echo "(gb+0.5)/1" )" >> $GITHUB_ENV
-      
-      - run: echo '${{ env.test1 }}'
-      - run: echo '${{ env.test2 }}'
-
-
-      - run: echo '${{ env.GITHUB_RUN_NUMBER_WITH_OFFSET }}'
-      - run: echo '${{ env.GITHUB_RUN_NUMBER_WITH_OFFSET2 }}'
-
-      - run: echo "num_val_2=${{env.COVERAGE}}" >> $GITHUB_OUTPUT
-      - run: echo '${{ steps.outputs.num_val_2 }}'
-
       - name: Get Coverage for badge
         run: |
           REF=${{ github.ref }}
@@ -133,6 +63,7 @@ jobs:
           echo $BRANCH_NAME
           echo "BRANCH=$(echo ${BRANCH_NAME})" >> $GITHUB_ENV
       - name: Create the Badge
+        if: github.ref == 'refs/heads/main'
         uses: schneegans/dynamic-badges-action@v1.6.0
         with:
           auth: ${{ secrets.GIST_SECRET }}

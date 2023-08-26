@@ -44,7 +44,6 @@ jobs:
           bundle exec rake db:setup
       - name: Compile assets
         run: |
-          bundle exec rails webpacker:install
           bundle exec rails webpacker:compile
       - name: Run RSpec
         run: COVERAGE=true bundle exec rspec

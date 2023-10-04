@@ -32,6 +32,9 @@ jobs:
           BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")
           gem install bundler -v $BUNDLER_VERSION
           bundle install --jobs 4 --retry 3
+      - name: Configure Yarn
+        run: |
+          yarn install
       - name: Which ruby?
         run: ruby -v
       - name: Which gem?
@@ -44,21 +47,15 @@ jobs:
           bundle exec rake db:setup
       - name: Compile assets
         run: |
-          bundle exec rails webpacker:install
           bundle exec rails webpacker:compile
       - name: Run RSpec
         run: COVERAGE=true bundle exec rspec
-
-      - id: getParams
+      - name: getParams
+        id: coverage
         run: |
-          content=`cat /home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json`
-          # the following lines are only required for multi line json
-          content="${content//'%'/'%25'}"
-          content="${content//$'\n'/'%0A'}"
-          content="${content//$'\r'/'%0D'}"
-          # end of optional handling for multi line json
-          result="${{fromJson($content).result.line}}"
-          echo "COVERAGE=$(echo $result)" >> $GITHUB_ENV
+          content=$(jq -c . < /home/runner/work/slot-booking-app/slot-booking-app/coverage/.last_run.json)
+          echo "last_result_content=${content}" >> $GITHUB_OUTPUT
+      - run: echo "COVERAGE=${{ fromJson(steps.coverage.outputs.last_result_content).result.line }}"  >> $GITHUB_ENV
       - name: Get Coverage for badge
         run: |
           REF=${{ github.ref }}
@@ -68,12 +65,14 @@ jobs:
           echo $BRANCH_NAME
           echo "BRANCH=$(echo ${BRANCH_NAME})" >> $GITHUB_ENV
       - name: Create the Badge
+        if: github.ref == 'refs/heads/main'
         uses: schneegans/dynamic-badges-action@v1.6.0
         with:
           auth: ${{ secrets.GIST_SECRET }}
           gistID: 6cfb4fc7d7e50f7158c03890c1a4a513
           filename: slot-booking-app__${{ env.BRANCH }}.json
           label: Test Coverage
+          namedLogo: JavaScript
           message: "${{ env.COVERAGE }}%"
           valColorRange: ${{ env.COVERAGE }}
           maxColorRange: 100

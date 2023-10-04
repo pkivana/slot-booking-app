@@ -47,6 +47,7 @@ jobs:
           bundle exec rake db:setup
       - name: Compile assets
         run: |
+          export NODE_OPTIONS=--openssl-legacy-provider
           bundle exec rails webpacker:compile
       - name: Run RSpec
         run: COVERAGE=true bundle exec rspec
